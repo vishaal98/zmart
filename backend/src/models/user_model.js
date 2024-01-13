@@ -59,4 +59,4 @@ userSchema.methods.hasSetNonDefaultAddress = async function () {
 
 const User = mongoose.model("User", userSchema);
 
-module.exports.User = User;
+module.exports = User;

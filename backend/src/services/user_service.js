@@ -1,7 +1,7 @@
 const httpStatus = require("http-status");
 const ApiError = require("../utils/apiError");
 const bcrypt = require("bcryptjs");
-const User = require("../models/user_model").User;
+const User = require("../models/user_model");
 
 const createUser = async (user) => {
   if (await User.isEmailTaken(user.email)) {

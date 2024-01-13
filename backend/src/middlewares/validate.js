@@ -8,7 +8,6 @@ const ApiError = require("../utils/apiError");
  *
  */
 const validate = (schema) => (req, res, next) => {
-  console.log("check:", req.body);
   // Request body should be JSON, if present
   if (Object.keys(req.body).length !== 0 && !req.is("application/json")) {
     return next(

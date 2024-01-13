@@ -5,12 +5,15 @@ const compression = require("compression");
 const ApiError = require("./utils/apiError");
 const httpStatus = require("http-status");
 const passport = require("passport");
+const helmet = require("helmet");
 const { jwtStrategy } = require("./config/passport");
 
 const app = express();
 
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
+
+app.use(helmet());
 
 // parse json request body
 app.use(express.json());

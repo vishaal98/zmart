@@ -26,10 +26,12 @@ const jwtOptions = {
  */
 const jwtVerify = async (payload, done) => {
   try {
+    console.log("i am here", payload);
     if (payload.type !== tokenTypes.ACCESS) {
       return done(new Error("Invalid token type", false));
     }
     const user = await User.findById(payload.sub);
+    console.log("passport check: ", user);
     if (!user) {
       return done(null, false);
     }
