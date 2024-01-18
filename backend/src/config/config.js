@@ -3,7 +3,7 @@ const path = require("path");
 const Joi = require("joi");
 
 // const DEFAULT_WALLET_MONEY = 500;
-// const DEFAULT_PAYMENT_OPTION = "PAYMENT_OPTION_DEFAULT";
+const DEFAULT_PAYMENT_OPTION = "PAYMENT_OPTION_DEFAULT";
 // const DEFAULT_ADDRESSS = "ADDRESS_NOT_SET";
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
@@ -19,6 +19,11 @@ const envVarsSchema = Joi.object()
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
       .default(30)
       .description("minutes after which access tokens expire"),
+    CLIENT_URL: Joi.string().required().description("base URL"),
+    CLIENT_ID: Joi.string().required().description("Google client ID"),
+    CLIENT_SECRETE: Joi.string()
+      .required()
+      .description("Google client secrete"),
   })
   .unknown();
 
@@ -43,10 +48,16 @@ module.exports = {
     },
   },
   //   default_wallet_money: DEFAULT_WALLET_MONEY,
-  //   default_payment_option: DEFAULT_PAYMENT_OPTION,
+  default_payment_option: DEFAULT_PAYMENT_OPTION,
   //   default_address: DEFAULT_ADDRESSS,
   jwt: {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+  },
+
+  google: {
+    client_url: envVars.CLIENT_URL,
+    client_id: envVars.CLIENT_ID,
+    client_secrete: envVars.CLIENT_SECRETE,
   },
 };
