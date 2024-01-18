@@ -5,9 +5,9 @@ const User = require("../models/user_model");
 
 const createUser = async (user) => {
   if (await User.isEmailTaken(user.email)) {
-    return new ApiError(httpStatus.OK, "Email is already taken");
+    throw new ApiError(httpStatus.CONFLICT, "Email is already taken");
   }
-
+  console.log(user);
   let salt = await bcrypt.genSalt();
   let hashedPassword = await bcrypt.hash(user.password, salt);
   let newUser = await User.create({
