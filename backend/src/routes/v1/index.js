@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const userRoute = require("./user_route.js");
-const authRoute = require("./auth_route.js");
 // const passport = require("passport");
 
-router.use("/auth", authRoute);
+router.use("/auth", require("./auth_route.js"));
 
 // passport.authenticate("jwt", { session: false });
-router.use("/users", userRoute);
+router.use("/users", require("./user_route.js"));
+router.use("/products", require("./product_route.js"));
+router.use("/cart", require("./cart_route.js"));
 
 module.exports = router;
