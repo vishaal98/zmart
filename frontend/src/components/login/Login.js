@@ -9,24 +9,47 @@ import Google from "../../assets/icons/google.svg";
 import { useForm } from "react-hook-form";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@emotion/react";
+import axios from "../../api/axios";
+import Axios from "axios";
 
 export default function Login({ handleClose }) {
   const theme = useTheme();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down("sm"));
+  // const matchDownSM = useMediaQuery(theme.breakpoints.down("sm"));
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const loginUser = async (data) => {
+    try {
+      const response = await axios.post("v1/auth/login/", data);
+      console.log(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem(
+        "token",
+        JSON.stringify(response.data.tokens.access.token)
+      );
+      handleClose();
+      window.location.reload();
+    } catch (err) {
+      console.log("Error logging in the user: ", err);
+      if (err.response.status === 401) {
+        setError("email", { message: err.response.data.message });
+      }
+    }
+  };
 
   // useEffect(() => {
   //   console.log(errors);
   // }, [errors]);
 
   const googleHandler = async () => {
-    // login || singup
+    // const response = await Axios.get("http://localhost:8080/auth/google/");
+    // const response = await axios.get("auth/google/");
+    window.location.href = "http://127.0.0.1:8080/auth/google/";
+    // console.log(response.data);
   };
 
   const loginHandler = async () => {};
@@ -37,7 +60,7 @@ export default function Login({ handleClose }) {
       <DialogContent>
         <form
           component="form"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(loginUser)}
           // sx={{
           //   maxWidth: "500px",
           //   padding: "20px",
@@ -51,6 +74,10 @@ export default function Login({ handleClose }) {
             label="Email"
             {...register("email", {
               required: { value: true, message: "Email cannot be empty" },
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Enter a valid email address",
+              },
             })}
             error={Boolean(errors.email)}
             helperText={errors.email?.message}

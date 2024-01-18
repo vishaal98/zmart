@@ -9,6 +9,7 @@ import Google from "../../assets/icons/google.svg";
 import { CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTheme } from "@emotion/react";
+import axios from "../../api/axios";
 
 export default function Register({ handleClose }) {
   const theme = useTheme();
@@ -16,9 +17,30 @@ export default function Register({ handleClose }) {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  // const onSubmit = (data) => console.log(data);
+
+  const registerUser = async (data) => {
+    try {
+      const response = await axios.post("v1/auth/register/", data);
+      console.log(response.data);
+      localStorage.setItem(
+        "token",
+        JSON.stringify(response.data.tokens.access.token)
+      );
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      handleClose();
+      window.location.reload();
+    } catch (err) {
+      console.log("Error registering the user: ", err);
+      if (err.response.status === 409) {
+        setError("email", { message: err.response.data.message });
+      }
+    }
+  };
+
   const googleRegisterHandler = () => {};
   // useEffect(() => {
   //   console.log(errors);
@@ -30,7 +52,7 @@ export default function Register({ handleClose }) {
       <DialogContent>
         <form
           component="form"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(registerUser)}
           // sx={{
           //   maxWidth: "500px",
           //   padding: "20px",

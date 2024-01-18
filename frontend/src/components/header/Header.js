@@ -1,28 +1,3 @@
-// import React from "react";
-// import PropTypes from "prop-types";
-// import "./header.scss";
-
-// const Header = () => {
-//   return (
-//     <div className="header flex-column-center">
-//       <div className="flex-between">
-//         <div className="flex">
-//           <h3>LOGO</h3>
-//           <h5>ZMART</h5>
-//         </div>
-//         <div className="flex">
-//           <button type="button">Login</button>
-//           <button type="button">Register</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// Header.propTypes = {};
-
-// export default Header;
-
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
@@ -46,10 +21,11 @@ import { useTheme } from "@emotion/react";
 
 const drawerWidth = 240;
 
-function DrawerAppBar(props) {
+function Header(props) {
   const theme = useTheme();
-  const { window } = props;
+  const { window: screen } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const userToken = localStorage.getItem("token");
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -82,7 +58,7 @@ function DrawerAppBar(props) {
   );
 
   const container =
-    window !== undefined ? () => window().document.body : undefined;
+    screen !== undefined ? () => screen().document.body : undefined;
 
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
@@ -99,8 +75,13 @@ function DrawerAppBar(props) {
     setRegisterOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
   return (
-    <React.Fragment>
+    <>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar component="nav" sx={{ background: theme.palette.primary.dark }}>
@@ -121,29 +102,45 @@ function DrawerAppBar(props) {
             >
               ZMART
             </Typography>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <Button
-                key="Login"
-                sx={{ color: "#fff" }}
-                onClick={() => handleClickOpen("login")}
-              >
-                Login
-              </Button>
-            </Box>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <Button
-                key="Register"
-                sx={{ color: "#fff" }}
-                onClick={() => handleClickOpen("register")}
-              >
-                Register
-              </Button>
-            </Box>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <Button key="Profile" sx={{ color: "#fff" }}>
-                Profile
-              </Button>
-            </Box>
+            {userToken ? (
+              <>
+                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Button key="Profile" sx={{ color: "#fff" }}>
+                    Profile
+                  </Button>
+                </Box>
+                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Button
+                    key="Profile"
+                    sx={{ color: "#fff" }}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                </Box>
+              </>
+            ) : (
+              <>
+                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Button
+                    key="Login"
+                    sx={{ color: "#fff" }}
+                    onClick={() => handleClickOpen("login")}
+                  >
+                    Login
+                  </Button>
+                </Box>
+                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Button
+                    key="Register"
+                    sx={{ color: "#fff" }}
+                    onClick={() => handleClickOpen("register")}
+                  >
+                    Register
+                  </Button>
+                </Box>
+              </>
+            )}
           </Toolbar>
         </AppBar>
         <nav>
@@ -173,16 +170,12 @@ function DrawerAppBar(props) {
       <Dialog open={registerOpen} onClose={handleClose}>
         <Register handleClose={handleClose} />
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }
 
-DrawerAppBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
+Header.propTypes = {
   window: PropTypes.func,
 };
 
-export default DrawerAppBar;
+export default Header;
