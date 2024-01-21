@@ -35,9 +35,15 @@ const removeFromCart = catchAsync(async (req, res) => {
   res.status(200).json({ updatedCart });
 });
 
+const checkout = catchAsync(async (req, res) => {
+  const user = await cartService.checkout(req.user, req.body.addressId);
+  res.send({ user: user, message: "order placed" });
+});
+
 module.exports = {
   listCart,
   addToCart,
   updateCart,
   removeFromCart,
+  checkout,
 };

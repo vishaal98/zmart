@@ -35,6 +35,17 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+    walletMoney: {
+      type: Number,
+      required: true,
+      default: config.default_wallet_money,
+    },
+    address: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+      },
+    ],
   },
   {
     timestamps: true,

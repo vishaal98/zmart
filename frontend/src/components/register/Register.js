@@ -24,7 +24,11 @@ export default function Register({ handleClose }) {
 
   const registerUser = async (data) => {
     try {
-      const response = await axios.post("v1/auth/register/", data);
+      const response = await axios.post("v1/auth/register/", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
       console.log(response.data);
       localStorage.setItem(
         "token",

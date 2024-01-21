@@ -96,9 +96,33 @@ const removeProductFromCart = async (productId, user) => {
   return cart;
 };
 
+//use address ID for order history
+const checkout = async (user, addressId) => {
+  const cart = await Cart.findOne({ email: user.email }).populate({
+    path: "cartItems.product",
+    model: "Product",
+  });
+  const totalAmount = cart.cartItems.reduce((sum, item) => {
+    return sum + item.quantity * item.product.cost;
+  }, 0);
+
+  user.walletMoney = user.walletMoney - totalAmount;
+  cart.cartItems = [];
+  await user.save();
+  await cart.save();
+
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    walletMoney: user.walletMoney,
+  };
+};
+
 module.exports = {
   getProductsFromCart,
   addProductToCart,
   updateProductCart,
   removeProductFromCart,
+  checkout,
 };

@@ -18,10 +18,12 @@ import Dialog from "@mui/material/Dialog";
 import Login from "../login/Login";
 import Register from "../register/Register";
 import { useTheme } from "@emotion/react";
-
+import "./header.scss";
+import { useNavigate } from "react-router-dom";
 const drawerWidth = 240;
 
 function Header(props) {
+  const navigate = useNavigate();
   const theme = useTheme();
   const { window: screen } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -82,10 +84,13 @@ function Header(props) {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
+      <Box className="header-position">
         <CssBaseline />
-        <AppBar component="nav" sx={{ background: theme.palette.primary.dark }}>
-          <Toolbar>
+        <AppBar
+          component="nav"
+          sx={{ position: "inherit", background: theme.palette.primary.dark }}
+        >
+          <Toolbar sx={{ justifyContent: "space-between" }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -98,14 +103,23 @@ function Header(props) {
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              sx={{
+                // flexGrow: 1,
+                display: { xs: "none", sm: "block" },
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/")}
             >
               ZMART
             </Typography>
             {userToken ? (
-              <>
+              <Box sx={{ display: "flex" }}>
                 <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                  <Button key="Profile" sx={{ color: "#fff" }}>
+                  <Button
+                    key="Profile"
+                    sx={{ color: "#fff" }}
+                    onClick={() => navigate("/profile")}
+                  >
                     Profile
                   </Button>
                 </Box>
@@ -118,9 +132,9 @@ function Header(props) {
                     Logout
                   </Button>
                 </Box>
-              </>
+              </Box>
             ) : (
-              <>
+              <Box sx={{ display: "flex" }}>
                 <Box sx={{ display: { xs: "none", sm: "block" } }}>
                   <Button
                     key="Login"
@@ -139,7 +153,7 @@ function Header(props) {
                     Register
                   </Button>
                 </Box>
-              </>
+              </Box>
             )}
           </Toolbar>
         </AppBar>

@@ -7,7 +7,7 @@ import {
 import { Button, CircularProgress, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useNavigate } from "react-router-dom";
 import "./cart.scss";
 import ItemQuantity from "./ItemQuantity";
 import { enqueueSnackbar } from "notistack";
@@ -38,6 +38,7 @@ const Cart = ({
   handleQuantity,
   isCartLoading,
 }) => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [tempQuantity, setTempQuantity] = useState(null);
   const [debounceTimeout, setDebounceTimeout] = useState(0);
@@ -54,7 +55,7 @@ const Cart = ({
     );
   };
 
-  if (isCartLoading || !items) {
+  if (isCartLoading) {
     return (
       <Box className="cart empty">
         <CircularProgress />
@@ -62,7 +63,7 @@ const Cart = ({
     );
   }
 
-  if (!items.length) {
+  if (!items || !items.length) {
     return (
       <Box className="cart empty">
         <ShoppingCartOutlined className="empty-cart-icon" />
@@ -76,62 +77,66 @@ const Cart = ({
   return (
     <>
       <Box className="cart">
-        {items?.map((item) => (
-          <Box key={item._id}>
-            {item.quantity > 0 ? (
-              <Box display="flex" alignItems="flex-start" padding="1rem">
-                <Box className="image-container">
-                  <img
-                    // Add product image
-                    src={item.image}
-                    // Add product name as alt eext
-                    alt={item.name}
-                    width="100%"
-                    height="100%"
-                  />
-                </Box>
+        {items?.map((item) =>
+          item.quantity > 0 ? (
+            <Box
+              key={item._id}
+              display="flex"
+              alignItems="flex-start"
+              padding="1rem"
+              paddingBottom="3rem"
+            >
+              <Box className="image-container">
+                <img
+                  // Add product image
+                  src={item.image}
+                  // Add product name as alt eext
+                  alt={item.name}
+                  width="100%"
+                  height="100%"
+                />
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+                height="6rem"
+                paddingX="1rem"
+              >
+                <div>{item.name}</div>
                 <Box
                   display="flex"
-                  flexDirection="column"
                   justifyContent="space-between"
-                  height="6rem"
-                  paddingX="1rem"
+                  alignItems="center"
                 >
-                  <div>{item.name}</div>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    {isReadOnly ? (
-                      <p>Qty: {item.quantity}</p>
-                    ) : (
-                      <ItemQuantity
-                        value={item.quantity}
-                        // Add required props by checking implementation
-                        handleAdd={async () => {
-                          let updatedQuantity =
-                            (tempQuantity ?? item.quantity) + 1;
-                          setTempQuantity(updatedQuantity);
-                          debounce(debounceTimeout, item, updatedQuantity);
-                        }}
-                        handleDelete={async () => {
-                          let updatedQuantity =
-                            (tempQuantity ?? item.quantity) - 1;
-                          setTempQuantity(updatedQuantity);
-                          debounce(debounceTimeout, item, updatedQuantity);
-                        }}
-                      />
-                    )}
-                    <Box padding="0.5rem" fontWeight="700">
-                      ${item.cost}
-                    </Box>
+                  {isReadOnly ? (
+                    <p>Qty: {item.quantity}</p>
+                  ) : (
+                    <ItemQuantity
+                      value={item.quantity}
+                      // Add required props by checking implementation
+                      handleAdd={async () => {
+                        let updatedQuantity =
+                          (tempQuantity ?? item.quantity) + 1;
+                        setTempQuantity(updatedQuantity);
+                        debounce(debounceTimeout, item, updatedQuantity);
+                      }}
+                      handleDelete={async () => {
+                        let updatedQuantity =
+                          (tempQuantity ?? item.quantity) - 1;
+                        setTempQuantity(updatedQuantity);
+                        debounce(debounceTimeout, item, updatedQuantity);
+                      }}
+                    />
+                  )}
+                  <Box padding="0.5rem" fontWeight="700">
+                    ${item.cost}
                   </Box>
                 </Box>
               </Box>
-            ) : null}
-          </Box>
-        ))}
+            </Box>
+          ) : null
+        )}
         <Box
           padding="1rem"
           display="flex"
@@ -159,7 +164,9 @@ const Cart = ({
               variant="contained"
               startIcon={<ShoppingCart />}
               className="checkout-btn"
-              // onClick={() => history.push("/checkout", { from: "Products" })}
+              onClick={() => {
+                navigate("/checkout");
+              }}
             >
               Checkout
             </Button>

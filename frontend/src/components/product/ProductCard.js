@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import "./productCard.scss";
 
 const ProductCard = ({ product, handleAddToCart }) => {
   return (

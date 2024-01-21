@@ -8,7 +8,6 @@ const getUser = catchAsync(async (req, res) => {
   if (!userData) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
-  console.log("User check, ", userData, req.user);
 
   if (userData.email !== req.user.email) {
     throw new ApiError(
@@ -22,10 +21,15 @@ const getUser = catchAsync(async (req, res) => {
       const addressDetails = await userService.getUserAddressById(
         req.params.userId
       );
-      res.send({ address: addressDetails.address });
+      return res.send({ address: addressDetails.address });
     }
   }
   res.send(userData);
+});
+
+const updateUser = catchAsync(async (req, res) => {
+  const user = await userService.updateUser(req.user._id, req.body);
+  res.send(user);
 });
 
 const setAddress = catchAsync(async (req, res) => {
@@ -41,14 +45,25 @@ const setAddress = catchAsync(async (req, res) => {
     );
   }
 
-  const address = await userService.setAddress(user, req.body.address);
+  const address = await userService.setAddress(user, req.body);
 
   res.send({
     address: address,
   });
 });
 
+const deleteAddress = catchAsync(async (req, res) => {
+  const address = await userService.deleteAddress(
+    req.user,
+    req.params.addressId
+  );
+
+  res.send({ address });
+});
+
 module.exports = {
   getUser,
+  updateUser,
   setAddress,
+  deleteAddress,
 };

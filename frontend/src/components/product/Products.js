@@ -7,6 +7,7 @@ import { enqueueSnackbar } from "notistack";
 import Cart, { generateCartItemsFrom } from "../cart/Cart";
 import { useTheme } from "@emotion/react";
 import axios from "../../api/axios";
+import "./products.scss";
 
 const Products = () => {
   const theme = useTheme();
@@ -40,14 +41,16 @@ const Products = () => {
     } catch (err) {
       if (err.response && err.response.status === 400) {
         enqueueSnackbar(err.response.data.message, { variant: "error" });
-      } else {
-        enqueueSnackbar(
-          "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
-          {
-            variant: "error",
-          }
-        );
       }
+      // else {
+      //   enqueueSnackbar(
+      //     "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
+      //     {
+      //       variant: "error",
+      //     }
+      //   );
+      // }
+      setIsCartLoading(false);
       return null;
     }
   };
@@ -61,7 +64,7 @@ const Products = () => {
   }, [products]);
 
   const isItemInCart = (items, productId) => {
-    if (items.length) {
+    if (items?.length) {
       for (let i = 0; i < items.length; i++) {
         if (items[i].product === productId) return true;
       }
@@ -92,7 +95,6 @@ const Products = () => {
     }
     try {
       let data = { productId: productId, quantity: qty };
-      console.log(data);
       let res = await axios.post("v1/cart/addtocart", data);
 
       setCartItems(
@@ -102,7 +104,6 @@ const Products = () => {
       if (error.response) {
         enqueueSnackbar(error.response.data.message, { variant: "error" });
       } else {
-        console.log(error);
         enqueueSnackbar(
           "Could not fetch products. Check that the backend is running, reachable and returns valid JSON.",
           { variant: "error" }
@@ -120,9 +121,7 @@ const Products = () => {
     }
     try {
       let data = { productId: item_id, quantity: item_qty };
-      console.log("before update api: ", data);
       let res = await axios.put("v1/cart/updatecart", data);
-      console.log("after update api: ", res.data);
       setCartItems(
         generateCartItemsFrom(res.data.updatedCart.cartItems, products)
       );
@@ -130,7 +129,6 @@ const Products = () => {
       if (error.response) {
         enqueueSnackbar(error.response.data.message, { variant: "error" });
       } else {
-        console.log(error);
         enqueueSnackbar(
           "Could not fetch products. Check that the backend is running, reachable and returns valid JSON.",
           { variant: "error" }
@@ -140,19 +138,11 @@ const Products = () => {
   };
 
   return (
-    <Grid container sx={{ mt: "64px" }}>
+    <Grid container>
       <Grid item md={token ? 9 : 12} sm={12}>
         <Grid container>
-          <Grid item className="product-grid" sx={{ height: "400px" }}>
-            <Box
-              className="hero"
-              // sx={{
-              //   height: "inherit",
-              //   display: "flex",
-              //   flexDirection: "column",
-              //   justifyContent: "center",
-              // }}
-            >
+          <Grid item className="product-grid">
+            <Box className="hero">
               <p className="hero-heading">
                 India’s <span className="hero-highlight">FASTEST DELIVERY</span>{" "}
                 to your door step
@@ -213,7 +203,13 @@ const Products = () => {
         </Grid>
       </Grid>
       {token && (
-        <Grid item md={3} sm={12} backgroundColor={theme.palette.primary.light}>
+        <Grid
+          item
+          md={3}
+          sm={12}
+          backgroundColor={theme.palette.primary.light}
+          className="cart-parent"
+        >
           <Cart
             products={products}
             items={cartItems}

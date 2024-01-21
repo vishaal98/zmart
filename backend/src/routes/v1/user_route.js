@@ -14,10 +14,19 @@ router.get(
 );
 
 router.put(
+  "/user/:userId",
+  auth,
+  validate(userValidation.updateUser),
+  userController.updateUser
+);
+
+router.put(
   "/:userId",
   auth,
   validate(userValidation.setAddress),
   userController.setAddress
 );
+
+router.delete("/deleteAddress/:addressId", auth, userController.deleteAddress);
 
 module.exports = router;

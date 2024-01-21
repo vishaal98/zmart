@@ -1,0 +1,44 @@
+.profile-parent{
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFE5E5;
+    .profile{
+        padding: 5px;
+        .profile-content{
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+
+            .profile-form{
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                padding-bottom: 3rem;
+                .form-table{
+                text-align: left;
+                th{
+                    padding-right: 10rem;
+                }
+                td{
+                    min-width: 20rem;
+                }
+                
+            }
+
+            .buttons{
+                 display: flex;
+                 flex-direction: column;
+                 button{
+                    margin: 0.25rem;
+                 }
+                }
+            }
+
+            
+        }
+    }
+}
+

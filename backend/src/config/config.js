@@ -2,9 +2,9 @@ const dotenv = require("dotenv");
 const path = require("path");
 const Joi = require("joi");
 
-// const DEFAULT_WALLET_MONEY = 500;
+const DEFAULT_WALLET_MONEY = 5000;
 const DEFAULT_PAYMENT_OPTION = "PAYMENT_OPTION_DEFAULT";
-// const DEFAULT_ADDRESSS = "ADDRESS_NOT_SET";
+const DEFAULT_ADDRESSS = "ADDRESS_NOT_SET";
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
 
@@ -47,9 +47,9 @@ module.exports = {
       useUnifiedTopology: true,
     },
   },
-  //   default_wallet_money: DEFAULT_WALLET_MONEY,
+  default_wallet_money: DEFAULT_WALLET_MONEY,
   default_payment_option: DEFAULT_PAYMENT_OPTION,
-  //   default_address: DEFAULT_ADDRESSS,
+  default_address: DEFAULT_ADDRESSS,
   jwt: {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
