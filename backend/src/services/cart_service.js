@@ -3,6 +3,7 @@ const Cart = require("../models/cart_model");
 const Product = require("../models/product_model");
 const ApiError = require("../utils/apiError");
 const catchAsync = require("../utils/catchAsync");
+const Order = require("../models/order_model");
 
 const getProductsFromCart = async (userEmail) => {
   const cart = await Cart.findOne({ email: userEmail });
@@ -107,6 +108,21 @@ const checkout = async (user, addressId) => {
   }, 0);
 
   user.walletMoney = user.walletMoney - totalAmount;
+
+  //create order history
+  const order = await Order.create({
+    user: user._id,
+    items: cart.cartItems,
+    address: addressId,
+    totalAmount: totalAmount,
+  });
+
+  if (!order)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Could not perform checkout,, try again."
+    );
+
   cart.cartItems = [];
   await user.save();
   await cart.save();

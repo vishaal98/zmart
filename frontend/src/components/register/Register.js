@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Google from "../../assets/icons/google.svg";
 import { CircularProgress } from "@mui/material";
@@ -117,9 +115,9 @@ export default function Register({ handleClose }) {
             {...register("password", {
               required: { value: true, message: "Password cannot be empty" },
               pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,
+                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
                 message:
-                  "Password length must be 6 characters or more and contain atleast 1 upper case, 1 lower case and 1 number",
+                  "Password length must be 8 characters or more and contain atleast 1 upper case, 1 lower case and 1 number",
               },
             })}
             error={Boolean(errors.password)}

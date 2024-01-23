@@ -112,16 +112,7 @@ export default function Login({ handleClose }) {
             //   sx: { color: "#ffffff" },
             // }}
           />
-          {/* <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-        >
-          {isLoading ? <CircularProgress /> : "SignUp"}
-        </Button> */}
-          {/* <Button type="submit">Submit</Button> */}
+
           <Button
             type="submit"
             variant="contained"

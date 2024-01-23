@@ -9,12 +9,20 @@ import { useTheme } from "@emotion/react";
 import axios from "../../api/axios";
 import "./products.scss";
 
-const Products = () => {
+const Products = ({
+  filteredProducts,
+  setFilteredProducts,
+  isLoading,
+  setIsLoading,
+  showHeroimage,
+}) => {
   const theme = useTheme();
-  const [isLoading, setIsLoading] = useState(false);
   const [cartItems, setCartItems] = useState(null);
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  // const [filteredProducts, setFilteredProducts] = useState([]);
+  // const [search, setSearch] = useState("");
+  // const [debounceTimeout, setDebounceTimeout] = useState(0);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(true);
   const token = localStorage.getItem("token");
 
@@ -54,14 +62,6 @@ const Products = () => {
       return null;
     }
   };
-
-  useEffect(() => {
-    fetchProducts(setProducts);
-  }, []);
-
-  useEffect(() => {
-    if (token) fetchCart(setCartItems);
-  }, [products]);
 
   const isItemInCart = (items, productId) => {
     if (items?.length) {
@@ -137,18 +137,52 @@ const Products = () => {
     }
   };
 
+  // const performSearch = async (text) => {
+  //   setIsLoading(true);
+  //   try {
+  //     let res = await axios.get(
+  //       `${config.endpoint}/products/search?value=${text}`
+  //     );
+  //     setFilteredProducts(res.data);
+
+  //     // console.log(res.data);
+  //   } catch (error) {
+  //     if (error.response.status === 404) {
+  //       setFilteredProducts([]);
+  //     }
+  //   }
+  //   setIsLoading(false);
+  // };
+
+  // const debounceSearch = (event, debounceTimeout) => {
+  //   let value = event.target.value;
+  //   if (debounceTimeout) clearTimeout(debounceTimeout);
+  //   setDebounceTimeout(setTimeout(() => performSearch(value), 500));
+  // };
+
+  useEffect(() => {
+    fetchProducts(setProducts);
+  }, []);
+
+  useEffect(() => {
+    if (token) fetchCart(setCartItems);
+  }, [products]);
+
   return (
     <Grid container>
       <Grid item md={token ? 9 : 12} sm={12}>
         <Grid container>
-          <Grid item className="product-grid">
-            <Box className="hero">
-              <p className="hero-heading">
-                India’s <span className="hero-highlight">FASTEST DELIVERY</span>{" "}
-                to your door step
-              </p>
-            </Box>
-          </Grid>
+          {showHeroimage && (
+            <Grid item className="product-grid">
+              <Box className="hero">
+                <p className="hero-heading">
+                  India’s{" "}
+                  <span className="hero-highlight">FASTEST DELIVERY</span> to
+                  your door step
+                </p>
+              </Box>
+            </Grid>
+          )}
           <Grid item md={12} sm={12}>
             {isLoading ? (
               <Box

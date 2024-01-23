@@ -1,5 +1,5 @@
 .profile-parent{
-    height: 90vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,6 +24,7 @@
                 }
                 td{
                     min-width: 20rem;
+                    max-width: 25rem;
                 }
                 
             }

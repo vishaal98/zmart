@@ -61,9 +61,15 @@ const deleteAddress = catchAsync(async (req, res) => {
   res.send({ address });
 });
 
+const getOrderHistory = catchAsync(async (req, res) => {
+  const orders = await userService.getOrderHistory(req.user._id);
+  res.send(orders);
+});
+
 module.exports = {
   getUser,
   updateUser,
   setAddress,
   deleteAddress,
+  getOrderHistory,
 };

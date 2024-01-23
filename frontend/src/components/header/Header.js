@@ -18,14 +18,15 @@ import Dialog from "@mui/material/Dialog";
 import Login from "../login/Login";
 import Register from "../register/Register";
 import { useTheme } from "@emotion/react";
+import Logo from "../../assets/icons/logo.svg";
 import "./header.scss";
 import { useNavigate } from "react-router-dom";
 const drawerWidth = 240;
 
-function Header(props) {
+const Header = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { window: screen } = props;
+  const { window: screen, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const userToken = localStorage.getItem("token");
 
@@ -100,7 +101,7 @@ function Header(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
+            {/* <Typography
               variant="h6"
               component="div"
               sx={{
@@ -111,7 +112,23 @@ function Header(props) {
               onClick={() => navigate("/")}
             >
               ZMART
-            </Typography>
+            </Typography> */}
+            <Box
+              component="div"
+              sx={{
+                // flexGrow: 1,
+                display: { xs: "none", sm: "block" },
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/")}
+            >
+              <img
+                src={Logo}
+                style={{ height: "35px" }}
+                alt="Z-mart Logo"
+              ></img>
+            </Box>
+            {children && <Box sx={{ width: "30rem" }}>{children}</Box>}
             {userToken ? (
               <Box sx={{ display: "flex" }}>
                 <Box sx={{ display: { xs: "none", sm: "block" } }}>
@@ -186,7 +203,7 @@ function Header(props) {
       </Dialog>
     </>
   );
-}
+};
 
 Header.propTypes = {
   window: PropTypes.func,

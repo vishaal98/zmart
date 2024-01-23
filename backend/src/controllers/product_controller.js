@@ -6,6 +6,14 @@ const listProducts = catchAsync(async (req, res) => {
   res.send(products);
 });
 
+const searchProducts = catchAsync(async (req, res) => {
+  console.log("Request received for searching ", req.query.value);
+
+  const products = await productService.searchProducts(req.query.value);
+  res.send(products);
+});
+
 module.exports = {
   listProducts,
+  searchProducts,
 };

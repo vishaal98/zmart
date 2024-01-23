@@ -3,6 +3,7 @@ const ApiError = require("../utils/apiError");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user_model");
 const Address = require("../models/address_model");
+const Order = require("../models/order_model");
 
 const createUser = async (user) => {
   if (await User.isEmailTaken(user.email)) {
@@ -36,9 +37,28 @@ const getUserByEmail = async (email) => {
 };
 
 const updateUser = async (userId, userData) => {
+  const { currentPassword, newPassword } = userData;
+  let updateUserData = userData;
+
+  if (currentPassword) {
+    let user = await User.findOne({ _id: userId });
+    let isPasswordMatch = user.isPasswordMatch(currentPassword);
+    if (!isPasswordMatch)
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        "Current password is incorrect"
+      );
+
+    let salt = await bcrypt.genSalt();
+    let hashedPassword = await bcrypt.hash(newPassword, salt);
+    updateUserData = {
+      password: hashedPassword,
+    };
+  }
+
   const updatedUser = await User.findOneAndUpdate(
     { _id: userId },
-    { $set: userData },
+    { $set: updateUserData },
     { new: true }
   );
 
@@ -84,6 +104,20 @@ const deleteAddress = async (user, addressId) => {
   return userAddress.address;
 };
 
+const getOrderHistory = async (userId) => {
+  const orders = await Order.find({ user: userId })
+    .populate({
+      path: "items.product",
+      model: "Product",
+    })
+    .populate({
+      path: "address",
+      model: "Address",
+    });
+
+  return orders;
+};
+
 module.exports = {
   createUser,
   getUserById,
@@ -92,4 +126,5 @@ module.exports = {
   getUserAddressById,
   setAddress,
   deleteAddress,
+  getOrderHistory,
 };

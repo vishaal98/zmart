@@ -6,6 +6,8 @@ const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 
+router.get("/orders", auth, userController.getOrderHistory);
+
 router.get(
   "/:userId",
   auth,
