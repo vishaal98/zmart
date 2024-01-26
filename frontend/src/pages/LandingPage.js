@@ -4,8 +4,10 @@ import Products from "../components/product/Products";
 import axios from "../api/axios";
 import { useState } from "react";
 import { Search } from "@mui/icons-material";
+import { useTheme } from "@emotion/react";
 
 const LandingPage = () => {
+  const theme = useTheme();
   const [search, setSearch] = useState("");
   const [debounceTimeout, setDebounceTimeout] = useState(0);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -43,7 +45,11 @@ const LandingPage = () => {
                 <Search color="primary" />
               </InputAdornment>
             ),
-            style: { borderColor: "#ffffff", color: "#ffffff" },
+            style: {
+              borderColor: "#ffffff",
+              color: theme.palette.primary.dark,
+              backgroundColor: "#ffffff",
+            },
           }}
           placeholder="Search for products"
           name="search"

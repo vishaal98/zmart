@@ -112,7 +112,7 @@ const Checkout = () => {
     try {
       let res = await axios.delete(`v1/users/deleteAddress/${addressId}`);
       console.log("delte add: ", res.data);
-      setAddresses({ ...addresses, all: res.data });
+      setAddresses({ ...addresses, all: res.data.address });
     } catch (e) {
       if (e.response) {
         enqueueSnackbar(e.response.data.message, { variant: "error" });
@@ -227,7 +227,9 @@ const Checkout = () => {
                       setAddresses({ ...addresses, selected: address._id })
                     }
                   >
-                    <Typography>{address.street}</Typography>
+                    <Typography
+                      width={"80%"}
+                    >{`${address.street}, ${address.city}, ${address.state} - ${address.pincode}`}</Typography>
                     <Button
                       variant="outlined"
                       startIcon={<Delete />}

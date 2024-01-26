@@ -1,8 +1,6 @@
 import {
   Accordion,
-  AccordionDetails,
   AccordionSummary,
-  Box,
   Button,
   Card,
   CardActions,
@@ -28,11 +26,9 @@ import { useForm } from "react-hook-form";
 import { useTheme } from "@emotion/react";
 import axios from "../../api/axios";
 import { enqueueSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../utils/utils";
 
 const Profile = () => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem("user"));
   const [edit, setEdit] = useState(false);
@@ -157,6 +153,14 @@ const Profile = () => {
       const res = await axios.get("v1/users/orders");
       setOrdersList(res.data.reverse());
     } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        enqueueSnackbar("Your session has expired, Please login again", {
+          variant: "error",
+        });
+        window.location.reload();
+        return;
+      }
       if (error.response) {
         enqueueSnackbar(error.response.data.message, { variant: "error" });
       } else {
@@ -166,18 +170,6 @@ const Profile = () => {
       }
     }
   };
-
-  function createData(name, quantity, cost) {
-    return { name, quantity, cost };
-  }
-
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
 
   useEffect(() => {
     fetchOrderHistory();
