@@ -37,6 +37,7 @@ const removeFromCart = catchAsync(async (req, res) => {
 
 const checkout = catchAsync(async (req, res) => {
   const user = await cartService.checkout(req.user, req.body.addressId);
+
   res.send({ user: user, message: "order placed" });
 });
 
