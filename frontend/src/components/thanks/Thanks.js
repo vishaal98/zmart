@@ -2,7 +2,6 @@ import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import Footer from "./Footer";
 import "./thanks.scss";
 
 const Thanks = () => {
@@ -12,14 +11,6 @@ const Thanks = () => {
   const routeToProducts = () => {
     navigate("/");
   };
-
-  //   useEffect(() => {
-  //     const token = localStorage.getItem("token");
-
-  //     if (!token) {
-  //       history.push("/");
-  //     }
-  //   }, [history]);
 
   return (
     <>

@@ -19,10 +19,6 @@ const Products = ({
   const theme = useTheme();
   const [cartItems, setCartItems] = useState(null);
   const [products, setProducts] = useState([]);
-  // const [filteredProducts, setFilteredProducts] = useState([]);
-  // const [search, setSearch] = useState("");
-  // const [debounceTimeout, setDebounceTimeout] = useState(0);
-  // const [isLoading, setIsLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(true);
   const token = localStorage.getItem("token");
 
@@ -50,14 +46,6 @@ const Products = ({
       if (err.response && err.response.status === 400) {
         enqueueSnackbar(err.response.data.message, { variant: "error" });
       }
-      // else {
-      //   enqueueSnackbar(
-      //     "Could not fetch cart details. Check that the backend is running, reachable and returns valid JSON.",
-      //     {
-      //       variant: "error",
-      //     }
-      //   );
-      // }
       setIsCartLoading(false);
       return null;
     }
@@ -137,29 +125,6 @@ const Products = ({
     }
   };
 
-  // const performSearch = async (text) => {
-  //   setIsLoading(true);
-  //   try {
-  //     let res = await axios.get(
-  //       `${config.endpoint}/products/search?value=${text}`
-  //     );
-  //     setFilteredProducts(res.data);
-
-  //     // console.log(res.data);
-  //   } catch (error) {
-  //     if (error.response.status === 404) {
-  //       setFilteredProducts([]);
-  //     }
-  //   }
-  //   setIsLoading(false);
-  // };
-
-  // const debounceSearch = (event, debounceTimeout) => {
-  //   let value = event.target.value;
-  //   if (debounceTimeout) clearTimeout(debounceTimeout);
-  //   setDebounceTimeout(setTimeout(() => performSearch(value), 500));
-  // };
-
   useEffect(() => {
     fetchProducts(setProducts);
   }, []);
@@ -209,12 +174,10 @@ const Products = ({
                     <Grid item md={3} xs={6} key={pd._id}>
                       <ProductCard
                         product={pd}
-                        handleAddToCart={
-                          () =>
-                            addToCart(token, cartItems, products, pd._id, 1, {
-                              preventDuplicate: true,
-                            })
-                          //   console.log("hey i am the product Card")
+                        handleAddToCart={() =>
+                          addToCart(token, cartItems, products, pd._id, 1, {
+                            preventDuplicate: true,
+                          })
                         }
                       />
                     </Grid>

@@ -101,18 +101,6 @@ const Header = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            {/* <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                // flexGrow: 1,
-                display: { xs: "none", sm: "block" },
-                cursor: "pointer",
-              }}
-              onClick={() => navigate("/")}
-            >
-              ZMART
-            </Typography> */}
             <Box
               component="div"
               sx={{

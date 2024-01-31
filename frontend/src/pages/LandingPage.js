@@ -5,6 +5,7 @@ import axios from "../api/axios";
 import { useState } from "react";
 import { Search } from "@mui/icons-material";
 import { useTheme } from "@emotion/react";
+import Footer from "../components/footer/Footer";
 
 const LandingPage = () => {
   const theme = useTheme();
@@ -67,6 +68,7 @@ const LandingPage = () => {
         setIsLoading={setIsLoading}
         showHeroimage={!Boolean(search)}
       />
+      <Footer />
     </div>
   );
 };

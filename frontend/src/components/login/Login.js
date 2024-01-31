@@ -7,14 +7,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Google from "../../assets/icons/google.svg";
 import { useForm } from "react-hook-form";
-import { useMediaQuery } from "@mui/material";
+import { CircularProgress, useMediaQuery } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import axios from "../../api/axios";
 import Axios from "axios";
 
 export default function Login({ handleClose }) {
   const theme = useTheme();
-  // const matchDownSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -23,6 +23,7 @@ export default function Login({ handleClose }) {
   } = useForm();
 
   const loginUser = async (data) => {
+    setIsLoading(true);
     try {
       const response = await axios.post("v1/auth/login/", data);
       console.log(response.data);
@@ -31,6 +32,7 @@ export default function Login({ handleClose }) {
         "token",
         JSON.stringify(response.data.tokens.access.token)
       );
+      setIsLoading(false);
       handleClose();
       window.location.reload();
     } catch (err) {
@@ -40,10 +42,6 @@ export default function Login({ handleClose }) {
       }
     }
   };
-
-  // useEffect(() => {
-  //   console.log(errors);
-  // }, [errors]);
 
   const googleHandler = async () => {
     // const response = await Axios.get("http://localhost:8080/auth/google/");
@@ -58,17 +56,7 @@ export default function Login({ handleClose }) {
     <>
       <DialogTitle>Login</DialogTitle>
       <DialogContent>
-        <form
-          component="form"
-          onSubmit={handleSubmit(loginUser)}
-          // sx={{
-          //   maxWidth: "500px",
-          //   padding: "20px",
-          //   borderRadius: "10px",
-          //   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-          //   backgroundColor: "#2c2435",
-          // }}
-        >
+        <form component="form" onSubmit={handleSubmit(loginUser)}>
           <TextField
             fullWidth
             label="Email"
@@ -82,15 +70,6 @@ export default function Login({ handleClose }) {
             error={Boolean(errors.email)}
             helperText={errors.email?.message}
             margin="normal"
-            // sx={{
-            //   backgroundColor: "#322a3a",
-            // }}
-            // InputLabelProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
-            // InputProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
           />
           <TextField
             fullWidth
@@ -102,15 +81,6 @@ export default function Login({ handleClose }) {
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
             margin="normal"
-            // sx={{
-            //   backgroundColor: "#322a3a",
-            // }}
-            // InputLabelProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
-            // InputProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
           />
 
           <Button
@@ -125,7 +95,7 @@ export default function Login({ handleClose }) {
               "&:hover": { backgroundColor: "#ACA5D3" },
             }}
           >
-            Login
+            {isLoading ? <CircularProgress /> : "Login"}
           </Button>
         </form>
         <h4 style={{ color: theme.palette.primary.dark, textAlign: "center" }}>
@@ -146,11 +116,6 @@ export default function Login({ handleClose }) {
           Google
         </Button>
       </DialogContent>
-
-      {/* <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-      </DialogActions> */}
     </>
   );
-  //   <Dialog open={open} onClose={handleClose}></Dialog>;
 }

@@ -158,7 +158,6 @@ const Checkout = () => {
       });
       enqueueSnackbar("Order placed successfully!", { variant: "success" });
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      // history.push("/thanks");
       navigate("/thanks", { state: true });
     } catch (error) {
       if (error.response) {
@@ -195,7 +194,6 @@ const Checkout = () => {
       enqueueSnackbar("You must be logged in to access checkout page", {
         variant: "info",
       });
-      // history.push("/");
     }
   }, [token]);
 
@@ -248,7 +246,6 @@ const Checkout = () => {
               )}
             </Box>
 
-            {/* TODO: CRIO_TASK_MODULE_CHECKOUT - Dislay either "Add new address" button or the <AddNewAddressView> component to edit the currently selected address */}
             {!isAddingNewAddress ? (
               <Button
                 color="primary"
@@ -347,7 +344,6 @@ const Checkout = () => {
           </Box>
         </Grid>
       </Grid>
-      {/* <Footer /> */}
     </>
   );
 };

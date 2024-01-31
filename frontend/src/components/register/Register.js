@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import DialogContent from "@mui/material/DialogContent";
@@ -11,6 +11,7 @@ import axios from "../../api/axios";
 
 export default function Register({ handleClose }) {
   const theme = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -18,25 +19,24 @@ export default function Register({ handleClose }) {
     setError,
     formState: { errors },
   } = useForm();
-  // const onSubmit = (data) => console.log(data);
 
   const registerUser = async (data) => {
+    setIsLoading(true);
     try {
       const response = await axios.post("v1/auth/register/", {
         name: data.name,
         email: data.email,
         password: data.password,
       });
-      console.log(response.data);
       localStorage.setItem(
         "token",
         JSON.stringify(response.data.tokens.access.token)
       );
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      setIsLoading(false);
       handleClose();
       window.location.reload();
     } catch (err) {
-      console.log("Error registering the user: ", err);
       if (err.response.status === 409) {
         setError("email", { message: err.response.data.message });
       }
@@ -44,46 +44,21 @@ export default function Register({ handleClose }) {
   };
 
   const googleRegisterHandler = () => {};
-  // useEffect(() => {
-  //   console.log(errors);
-  // }, [errors]);
 
   return (
     <>
       <DialogTitle>Register</DialogTitle>
       <DialogContent>
-        <form
-          component="form"
-          onSubmit={handleSubmit(registerUser)}
-          // sx={{
-          //   maxWidth: "500px",
-          //   padding: "20px",
-          //   borderRadius: "10px",
-          //   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-          //   backgroundColor: "#2c2435",
-          // }}
-        >
+        <form component="form" onSubmit={handleSubmit(registerUser)}>
           <TextField
             fullWidth
             label="Username"
-            // name="name"
             {...register("name", {
               required: { value: true, message: "Name cannot be empty" },
             })}
-            // value={formData.name}
-            // onChange={handleChange}
             error={Boolean(errors.name)}
             helperText={errors.name?.message}
             margin="normal"
-            // sx={{
-            //   backgroundColor: "#322a3a",
-            // }}
-            // InputLabelProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
-            // InputProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
           />
           <TextField
             fullWidth
@@ -98,15 +73,6 @@ export default function Register({ handleClose }) {
             error={Boolean(errors.email)}
             helperText={errors.email?.message}
             margin="normal"
-            // sx={{
-            //   backgroundColor: "#322a3a",
-            // }}
-            // InputLabelProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
-            // InputProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
           />
           <TextField
             fullWidth
@@ -123,15 +89,6 @@ export default function Register({ handleClose }) {
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
             margin="normal"
-            // sx={{
-            //   backgroundColor: "#322a3a",
-            // }}
-            // InputLabelProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
-            // InputProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
           />
           <TextField
             fullWidth
@@ -145,25 +102,7 @@ export default function Register({ handleClose }) {
             error={Boolean(errors.confirmPassword)}
             helperText={errors.confirmPassword?.message}
             margin="normal"
-            // sx={{
-            //   backgroundColor: "#322a3a",
-            // }}
-            // InputLabelProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
-            // InputProps={{
-            //   sx: { color: "#ffffff" },
-            // }}
           />
-          {/* <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-        >
-          {isLoading ? <CircularProgress /> : "SignUp"}
-        </Button> */}
           <Button
             type="submit"
             variant="contained"
@@ -176,7 +115,7 @@ export default function Register({ handleClose }) {
               "&:hover": { backgroundColor: "#ACA5D3" },
             }}
           >
-            Register
+            {isLoading ? <CircularProgress /> : "Register"}
           </Button>
         </form>
         <h4 style={{ color: theme.palette.primary.dark, textAlign: "center" }}>
