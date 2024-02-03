@@ -1,4 +1,4 @@
-import { Box, Grid, InputAdornment, TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import Header from "../components/header/Header";
 import Products from "../components/product/Products";
 import axios from "../api/axios";
@@ -13,6 +13,16 @@ const LandingPage = () => {
   const [debounceTimeout, setDebounceTimeout] = useState(0);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [cartToggle, setCartToggle] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  const handleCartToggle = () => {
+    setCartToggle(!cartToggle);
+  };
+
+  const handleCartCount = (count) => {
+    setCartCount(count);
+  };
 
   const performSearch = async (text) => {
     setIsLoading(true);
@@ -35,7 +45,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      <Header>
+      <Header cartCount={cartCount} handleCartToggle={handleCartToggle}>
         <TextField
           className="search-desktop"
           size="small"
@@ -52,6 +62,7 @@ const LandingPage = () => {
               backgroundColor: "#ffffff",
             },
           }}
+          sx={{ width: "30rem" }}
           placeholder="Search for products"
           name="search"
           value={search}
@@ -67,6 +78,9 @@ const LandingPage = () => {
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         showHeroimage={!Boolean(search)}
+        cartToggle={cartToggle}
+        handleCartToggle={handleCartToggle}
+        handleCartCount={handleCartCount}
       />
       <Footer />
     </div>

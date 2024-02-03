@@ -13,3 +13,15 @@
         min-width: 80vw;
     }
 }
+
+.icon-buttons{
+    display: none;
+}
+
+@media only screen and (min-width: 376px) and (max-width: 576px) {
+    .icon-buttons{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+}

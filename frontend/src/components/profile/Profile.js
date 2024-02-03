@@ -281,6 +281,7 @@ const Profile = () => {
                         <th>{row.rowName}</th>
                         <td>
                           <TextField
+                            className="text-field"
                             type={row.visible ? "text" : "password"}
                             placeholder={`Enter ${row.rowName}`}
                             InputProps={{
@@ -328,9 +329,9 @@ const Profile = () => {
                             })}
                             error={Boolean(passwordErrors[row.fieldName])}
                             helperText={passwordErrors[row.fieldName]?.message}
-                            sx={{
-                              width: "100%",
-                            }}
+                            // sx={{
+                            //   width: "100%",
+                            // }}
                           />
                         </td>
                       </tr>

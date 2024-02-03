@@ -3,3 +3,5 @@ frontend/node_modules/
 frontend/build/
 backend/.env
 frontend/.env
+# Local Netlify folder
+.netlify

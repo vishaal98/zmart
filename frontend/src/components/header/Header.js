@@ -12,7 +12,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import Login from "../login/Login";
@@ -21,44 +20,20 @@ import { useTheme } from "@emotion/react";
 import Logo from "../../assets/icons/logo.svg";
 import "./header.scss";
 import { useNavigate } from "react-router-dom";
+import { ShoppingCart } from "@mui/icons-material";
+import { Badge } from "@mui/material";
 const drawerWidth = 240;
 
 const Header = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { window: screen, children } = props;
+  const { window: screen, children, handleCartToggle, cartCount } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const userToken = localStorage.getItem("token");
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        ZMART
-      </Typography>
-      <Divider />
-      <List>
-        <ListItem key="Login" disablePadding>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Login" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="Register" disablePadding>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Login" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="Profile" disablePadding>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Login" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </Box>
-  );
 
   const container =
     screen !== undefined ? () => screen().document.body : undefined;
@@ -83,6 +58,68 @@ const Header = (props) => {
     window.location.reload();
   };
 
+  const drawer = (
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{
+        textAlign: "center",
+        backgroundColor: theme.palette.primary.dark,
+        height: "100%",
+      }}
+    >
+      <Box
+        component="div"
+        sx={{
+          // flexGrow: 1,
+          display: { xs: "block", sm: "none" },
+          cursor: "pointer",
+        }}
+        onClick={() => navigate("/")}
+      >
+        <img src={Logo} style={{ height: "35px" }} alt="Z-mart Logo"></img>
+      </Box>
+      <Divider />
+      <List>
+        {!userToken ? (
+          <>
+            <ListItem key="Login" disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText
+                  primary="Login"
+                  onClick={() => handleClickOpen("login")}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem key="Register" disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText
+                  primary="Register"
+                  onClick={() => handleClickOpen("register")}
+                />
+              </ListItemButton>
+            </ListItem>
+          </>
+        ) : (
+          <>
+            <ListItem key="Profile" disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText
+                  primary="Profile"
+                  onClick={() => navigate("/profile")}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem key="Logout" disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary="Logout" onClick={handleLogout} />
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
+
   return (
     <>
       <Box className="header-position">
@@ -92,20 +129,33 @@ const Header = (props) => {
           sx={{ position: "inherit", background: theme.palette.primary.dark }}
         >
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <div className="icon-buttons">
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ display: { sm: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleCartToggle}
+                sx={{ display: { sm: "none" } }}
+              >
+                <Badge badgeContent={cartCount} color="secondary">
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
+            </div>
             <Box
               component="div"
               sx={{
                 // flexGrow: 1,
-                display: { xs: "none", sm: "block" },
+                display: { xs: "none", md: "block" },
                 cursor: "pointer",
               }}
               onClick={() => navigate("/")}
@@ -116,10 +166,10 @@ const Header = (props) => {
                 alt="Z-mart Logo"
               ></img>
             </Box>
-            {children && <Box sx={{ width: "30rem" }}>{children}</Box>}
+            {children && <Box>{children}</Box>}
             {userToken ? (
               <Box sx={{ display: "flex" }}>
-                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                <Box sx={{ display: { xs: "none", md: "block" } }}>
                   <Button
                     key="Profile"
                     sx={{ color: "#fff" }}
@@ -128,7 +178,7 @@ const Header = (props) => {
                     Profile
                   </Button>
                 </Box>
-                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                <Box sx={{ display: { xs: "none", md: "block" } }}>
                   <Button
                     key="Profile"
                     sx={{ color: "#fff" }}
@@ -140,7 +190,7 @@ const Header = (props) => {
               </Box>
             ) : (
               <Box sx={{ display: "flex" }}>
-                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                <Box sx={{ display: { xs: "none", md: "block" } }}>
                   <Button
                     key="Login"
                     sx={{ color: "#fff" }}

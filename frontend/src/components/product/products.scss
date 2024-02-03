@@ -9,7 +9,8 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: inherit;
+  // height: inherit;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,6 +20,12 @@
 .product-grid {
     height: 40rem;
   width: 100%;
+}
+@media (max-width: 768px) {
+  /* Adjust height of .hero for smaller screens */
+  .product-grid {
+    height: 20rem; /* Example height for smaller screens */
+  }
 }
 
 .hero-heading {
@@ -71,4 +78,10 @@
   .search-desktop {
     display: block !important;
   }
+}
+
+@media only screen and (min-width: 376px) and (max-width: 576px) {  
+  .cart-parent{
+        display: none !important;
+    }
 }

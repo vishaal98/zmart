@@ -1,17 +1,10 @@
-import {
-  AddOutlined,
-  RemoveOutlined,
-  ShoppingCart,
-  ShoppingCartOutlined,
-} from "@mui/icons-material";
-import { Button, CircularProgress, IconButton, Stack } from "@mui/material";
+import { ShoppingCart, ShoppingCartOutlined } from "@mui/icons-material";
+import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { useHistory, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./cart.scss";
 import ItemQuantity from "./ItemQuantity";
-import { enqueueSnackbar } from "notistack";
-import axios from "../../api/axios";
 
 export const generateCartItemsFrom = (cartData, productsData) => {
   if (!cartData) return [];

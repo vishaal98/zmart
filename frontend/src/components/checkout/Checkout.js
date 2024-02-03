@@ -14,8 +14,6 @@ const Checkout = () => {
   const theme = useTheme();
   const token = localStorage.getItem("token");
   const { walletMoney, _id: userId } = JSON.parse(localStorage.getItem("user"));
-  // const history = useHistory();
-  //   const { enqueueSnackbar } = useSnackbar();
   const [items, setItems] = useState([]);
   const [products, setProducts] = useState([]);
   const [addresses, setAddresses] = useState({

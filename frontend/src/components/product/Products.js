@@ -1,7 +1,6 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, CircularProgress, Drawer, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
-// import products from "../../assets/data/data";
 import ProductCard from "./ProductCard";
 import { enqueueSnackbar } from "notistack";
 import Cart, { generateCartItemsFrom } from "../cart/Cart";
@@ -9,18 +8,27 @@ import { useTheme } from "@emotion/react";
 import axios from "../../api/axios";
 import "./products.scss";
 
-const Products = ({
-  filteredProducts,
-  setFilteredProducts,
-  isLoading,
-  setIsLoading,
-  showHeroimage,
-}) => {
+const Products = (props) => {
   const theme = useTheme();
+  const {
+    window: screen,
+    filteredProducts,
+    setFilteredProducts,
+    isLoading,
+    setIsLoading,
+    showHeroimage,
+    cartToggle,
+    handleCartToggle,
+    handleCartCount,
+  } = props;
+  const drawerWidth = 240;
   const [cartItems, setCartItems] = useState(null);
   const [products, setProducts] = useState([]);
   const [isCartLoading, setIsCartLoading] = useState(true);
   const token = localStorage.getItem("token");
+
+  const container =
+    screen !== undefined ? () => screen().document.body : undefined;
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -133,6 +141,10 @@ const Products = ({
     if (token) fetchCart(setCartItems);
   }, [products]);
 
+  useEffect(() => {
+    if (cartItems) handleCartCount(cartItems?.length);
+  }, [cartItems]);
+
   return (
     <Grid container>
       <Grid item md={token ? 9 : 12} sm={12}>
@@ -148,7 +160,14 @@ const Products = ({
               </Box>
             </Grid>
           )}
-          <Grid item md={12} sm={12}>
+          <Grid
+            item
+            md={12}
+            sm={12}
+            sx={{
+              width: "100%",
+            }}
+          >
             {isLoading ? (
               <Box
                 display="flex"
@@ -200,20 +219,46 @@ const Products = ({
         </Grid>
       </Grid>
       {token && (
-        <Grid
-          item
-          md={3}
-          sm={12}
-          backgroundColor={theme.palette.primary.light}
-          className="cart-parent"
-        >
-          <Cart
-            products={products}
-            items={cartItems}
-            handleQuantity={handleQuantity}
-            isCartLoading={isCartLoading}
-          />
-        </Grid>
+        <>
+          <Grid
+            item
+            md={3}
+            sm={12}
+            backgroundColor={theme.palette.primary.light}
+            className="cart-parent"
+          >
+            <Cart
+              products={products}
+              items={cartItems}
+              handleQuantity={handleQuantity}
+              isCartLoading={isCartLoading}
+            />
+          </Grid>
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={cartToggle}
+            onClose={handleCartToggle}
+            anchor="right"
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            <Cart
+              products={products}
+              items={cartItems}
+              handleQuantity={handleQuantity}
+              isCartLoading={isCartLoading}
+            />
+          </Drawer>
+        </>
       )}
     </Grid>
   );

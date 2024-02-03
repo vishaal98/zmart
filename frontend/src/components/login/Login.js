@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Google from "../../assets/icons/google.svg";
 import { useForm } from "react-hook-form";
-import { CircularProgress, useMediaQuery } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import axios from "../../api/axios";
 import Axios from "axios";
