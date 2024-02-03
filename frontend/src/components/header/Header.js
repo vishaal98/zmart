@@ -18,6 +18,7 @@ import Login from "../login/Login";
 import Register from "../register/Register";
 import { useTheme } from "@emotion/react";
 import Logo from "../../assets/icons/logo.svg";
+import MobileLogo from "../../assets/icons/logo-mobile.svg";
 import "./header.scss";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
@@ -63,8 +64,8 @@ const Header = (props) => {
       onClick={handleDrawerToggle}
       sx={{
         textAlign: "center",
-        backgroundColor: theme.palette.primary.dark,
         height: "100%",
+        color: theme.palette.primary.dark,
       }}
     >
       <Box
@@ -76,7 +77,11 @@ const Header = (props) => {
         }}
         onClick={() => navigate("/")}
       >
-        <img src={Logo} style={{ height: "35px" }} alt="Z-mart Logo"></img>
+        <img
+          src={MobileLogo}
+          style={{ height: "35px" }}
+          alt="Z-mart Logo"
+        ></img>
       </Box>
       <Divider />
       <List>
