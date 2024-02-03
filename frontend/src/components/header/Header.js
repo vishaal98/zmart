@@ -144,17 +144,19 @@ const Header = (props) => {
               >
                 <MenuIcon />
               </IconButton>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="end"
-                onClick={handleCartToggle}
-                sx={{ display: { sm: "none" } }}
-              >
-                <Badge badgeContent={cartCount} color="secondary">
-                  <ShoppingCart />
-                </Badge>
-              </IconButton>
+              {userToken && (
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="end"
+                  onClick={handleCartToggle}
+                  sx={{ display: { sm: "none" } }}
+                >
+                  <Badge badgeContent={cartCount} color="secondary">
+                    <ShoppingCart />
+                  </Badge>
+                </IconButton>
+              )}
             </div>
             <Box
               component="div"
